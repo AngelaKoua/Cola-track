@@ -1,0 +1,310 @@
+@import "tailwindcss";
+
+:root {
+  /* ── PRIMARY (Slate Blue Steel) ────────────── */
+  --primary: #334155;
+  --primary-900: #0F172A;
+  --primary-800: #1E293B;
+  --primary-700: #334155;
+  --primary-600: #475569;
+  --primary-500: #64748B;
+
+  /* ── SECONDARY (Industrial Blue) ───────────── */
+  --secondary-600: #1E40AF;
+  --secondary-500: #2563EB;
+  --secondary-400: #3B82F6;
+  --secondary-100: #DBEAFE;
+  --secondary-50:  #EFF6FF;
+
+  /* ── ACCENT (Coca-Cola Heritage Red) ───────── */
+  --accent-red-700: #B91C22;
+  --accent-red-600: #CC1E25;
+  --accent-red:     #D92B2B;
+  --accent-red-100: #FEE2E2;
+  --accent-red-50:  #FEF2F2;
+
+  /* ── BACKGROUNDS ───────────────────────────── */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --surface: #FFFFFF;
+  --bg-base:     #F8FAFC;
+  --bg-surface:  #FFFFFF;
+  --bg-elevated: #F1F5F9;
+  --bg-sunken:   #E2E8F0;
+
+  /* ── TEXT ───────────────────────────────────── */
+  --text-primary:   #0F172A;
+  --text-secondary: #334155;
+  --text-tertiary:  #64748B;
+  --text-muted:     #94A3B8;
+  --text-on-dark:   #F1F5F9;
+  --text-on-accent: #FFFFFF;
+
+  /* ── STATUS ────────────────────────────────── */
+  --status-success: #059669;
+  --status-success-600: #059669;
+  --status-success-100: #D1FAE5;
+  --status-success-50:  #ECFDF5;
+
+  --status-warning: #F59E0B;
+  --status-warning-500: #F59E0B;
+  --status-warning-100: #FEF3C7;
+  --status-warning-50:  #FFFBEB;
+
+  --status-danger: #E11D48;
+  --status-danger-600:  #E11D48;
+  --status-danger-100:  #FFE4E6;
+  --status-danger-50:   #FFF1F2;
+
+  --status-info-500:    #2563EB;
+  --status-info-100:    #DBEAFE;
+  --status-info-50:     #EFF6FF;
+
+  --status-neutral: #64748B;
+  --status-neutral-500: #64748B;
+  --status-neutral-100: #F1F5F9;
+
+  /* ── UI ELEMENTS ───────────────────────────── */
+  --border-default:  #E2E8F0;
+  --border-light:    #F1F5F9;
+  --border-strong:   #CBD5E1;
+  --border-accent:   #D92B2B;
+  --hover-row:       #F8FAFC;
+  --active-selection: #DBEAFE;
+  --focus-ring:      rgba(37, 99, 235, 0.3);
+  --separator:       #E2E8F0;
+
+  /* ── CHART PALETTE ─────────────────────────── */
+  --chart-1: #D92B2B;
+  --chart-2: #2563EB;
+  --chart-3: #059669;
+  --chart-4: #F59E0B;
+  --chart-5: #8B5CF6;
+  --chart-6: #06B6D4;
+  --chart-grid: #E2E8F0;
+  --chart-axis: #94A3B8;
+
+  /* Legacy aliases for existing components */
+  --accent-blue: #2563EB;
+  --accent-green: #059669;
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-accent-blue: var(--accent-blue);
+  --color-accent-green: var(--accent-green);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+
+/* ===== ENTERPRISE INDUSTRIAL PLATFORM STYLES ===== */
+
+/* Noise texture overlay on body */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Control room grid background */
+.control-room-grid {
+  position: relative;
+}
+
+.control-room-grid::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image:
+    linear-gradient(rgba(100, 116, 139, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 116, 139, 0.5) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Enterprise section containers */
+.enterprise-section {
+  position: relative;
+  background: rgba(255, 255, 255, 0.80);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(226, 232, 240, 0.70);
+  border-radius: 1rem;
+  box-shadow:
+    0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -4px rgba(0, 0, 0, 0.05),
+    inset 0 1px 2px rgba(255, 255, 255, 0.8),
+    inset 0 -1px 2px rgba(0, 0, 0, 0.02);
+  padding: 1.75rem;
+  z-index: 1;
+}
+
+/* Section title styling */
+.section-title {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.section-title::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 1rem;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.section-title--kpi::before {
+  background: linear-gradient(to bottom, #059669, #34d399);
+}
+
+.section-title--analysis::before {
+  background: linear-gradient(to bottom, #1976D2, #60a5fa);
+}
+
+.section-title--operations::before {
+  background: linear-gradient(to bottom, #7c3aed, #a78bfa);
+}
+
+/* ===== ANIMATIONS ===== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmerLoading {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes subtleGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(5, 150, 105, 0);
+  }
+
+  50% {
+    box-shadow: 0 0 16px 2px rgba(5, 150, 105, 0.15);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out both;
+}
+
+.animate-shimmer {
+  animation: shimmerLoading 1.8s ease-in-out infinite;
+}
+
+.animate-subtle-glow {
+  animation: subtleGlow 2s ease-in-out infinite;
+}
+
+/* Stagger delays for KPI cards */
+.stagger-1 {
+  animation-delay: 0ms;
+}
+
+.stagger-2 {
+  animation-delay: 120ms;
+}
+
+.stagger-3 {
+  animation-delay: 240ms;
+}
+
+.stagger-4 {
+  animation-delay: 360ms;
+}
+
+.stagger-5 {
+  animation-delay: 480ms;
+}
+
+/* Enterprise loading shimmer bar */
+.shimmer-bar {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(90deg, #e2e8f0, #f1f5f9, #e2e8f0);
+  border-radius: 9999px;
+}
+
+.shimmer-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.6), transparent);
+  animation: shimmerLoading 1.8s ease-in-out infinite;
+}
+
+/* Chart grid watermark */
+.chart-watermark {
+  position: relative;
+}
+
+.chart-watermark::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.02;
+  background-image:
+    linear-gradient(rgba(100, 116, 139, 0.8) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 116, 139, 0.8) 1px, transparent 1px);
+  background-size: 24px 24px;
+  border-radius: inherit;
+}
+
+/* Progress micro-bar for KPI targets */
+.progress-micro-bar {
+  height: 2px;
+  border-radius: 9999px;
+  background: #e2e8f0;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-micro-bar .progress-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 1s ease-out;
+}

@@ -1,0 +1,44 @@
+incident_id,timestamp,machine_id,machine_type,incident_type,severity,downtime_hours,root_cause
+INC-0001,2026-01-04T13:50:00,OSM-001,osmoseur,membrane_fouling,5,2.9,Membrane Fouling
+INC-0002,2026-01-13T21:15:00,RMP-001,remplisseuse,sous_remplissage,5,4.6,Sous Remplissage
+INC-0003,2026-01-19T11:55:00,RMP-001,remplisseuse,desalignement,3,1.9,Desalignement
+INC-0004,2026-01-20T11:25:00,RMP-001,remplisseuse,fuite_air,5,2.8,Fuite Air
+INC-0005,2026-01-23T14:45:00,OSM-001,osmoseur,membrane_fouling,3,2.2,Membrane Fouling
+INC-0006,2026-01-23T23:50:00,RMP-001,remplisseuse,desalignement,2,2.0,Desalignement
+INC-0007,2026-01-25T06:25:00,RMP-001,remplisseuse,panne_moteur,1,0.7,Panne Moteur
+INC-0008,2026-02-05T13:15:00,RMP-001,remplisseuse,blocage_convoyeur,3,3.8,Blocage Convoyeur
+INC-0009,2026-02-07T17:25:00,RMP-001,remplisseuse,blocage_convoyeur,3,4.4,Blocage Convoyeur
+INC-0010,2026-02-12T08:25:00,RMP-001,remplisseuse,sous_remplissage,5,5.5,Sous Remplissage
+INC-0011,2026-02-12T13:50:00,OSM-001,osmoseur,membrane_fouling,2,1.5,Membrane Fouling
+INC-0012,2026-02-16T04:00:00,RMP-001,remplisseuse,sous_remplissage,4,2.6,Sous Remplissage
+INC-0013,2026-02-25T04:20:00,OSM-001,osmoseur,capteur_defectueux,2,1.9,Capteur Defectueux
+INC-0014,2026-02-26T07:25:00,RMP-001,remplisseuse,blocage_convoyeur,2,2.0,Blocage Convoyeur
+INC-0015,2026-03-05T21:15:00,RMP-001,remplisseuse,panne_moteur,2,2.8,Panne Moteur
+INC-0016,2026-03-09T20:20:00,OSM-001,osmoseur,pompe_defaillante,4,3.4,Pompe Defaillante
+INC-0017,2026-03-11T01:45:00,RMP-001,remplisseuse,panne_moteur,1,1.4,Panne Moteur
+INC-0018,2026-03-13T17:25:00,OSM-001,osmoseur,contamination_eau,1,0.6,Contamination Eau
+INC-0019,2026-03-18T05:15:00,RMP-001,remplisseuse,blocage_convoyeur,5,7.1,Blocage Convoyeur
+INC-0020,2026-04-04T19:00:00,RMP-001,remplisseuse,blocage_convoyeur,4,2.5,Blocage Convoyeur
+INC-0021,2026-04-07T15:05:00,OSM-001,osmoseur,contamination_eau,1,1.2,Contamination Eau
+INC-0022,2026-04-13T08:10:00,OSM-001,osmoseur,contamination_eau,1,1.4,Contamination Eau
+INC-0023,2026-04-15T23:00:00,RMP-001,remplisseuse,desalignement,3,2.7,Desalignement
+INC-0024,2026-04-19T21:05:00,OSM-001,osmoseur,capteur_defectueux,1,1.1,Capteur Defectueux
+INC-0025,2026-04-21T09:25:00,RMP-001,remplisseuse,panne_moteur,5,6.3,Panne Moteur
+INC-0026,2026-04-24T23:15:00,OSM-001,osmoseur,pompe_defaillante,1,0.5,Pompe Defaillante
+INC-0027,2026-04-25T13:45:00,RMP-001,remplisseuse,blocage_convoyeur,4,5.9,Blocage Convoyeur
+INC-0028,2026-04-28T20:40:00,RMP-001,remplisseuse,fuite_air,5,3.3,Fuite Air
+INC-0029,2026-05-03T03:45:00,RMP-001,remplisseuse,panne_moteur,5,5.3,Panne Moteur
+INC-0030,2026-05-09T09:25:00,OSM-001,osmoseur,capteur_defectueux,3,2.0,Capteur Defectueux
+INC-0031,2026-05-09T23:50:00,RMP-001,remplisseuse,panne_moteur,5,3.7,Panne Moteur
+INC-0032,2026-05-10T18:20:00,RMP-001,remplisseuse,blocage_convoyeur,2,2.4,Blocage Convoyeur
+INC-0033,2026-05-15T09:35:00,OSM-001,osmoseur,pompe_defaillante,3,4.0,Pompe Defaillante
+INC-0034,2026-05-17T23:20:00,OSM-001,osmoseur,contamination_eau,1,1.1,Contamination Eau
+INC-0035,2026-05-21T01:55:00,RMP-001,remplisseuse,panne_moteur,1,0.7,Panne Moteur
+INC-0036,2026-05-29T10:50:00,OSM-001,osmoseur,pompe_defaillante,2,1.9,Pompe Defaillante
+INC-0037,2026-06-06T23:05:00,RMP-001,remplisseuse,fuite_air,4,3.9,Fuite Air
+INC-0038,2026-06-08T15:05:00,RMP-001,remplisseuse,panne_moteur,4,4.9,Panne Moteur
+INC-0039,2026-06-12T18:45:00,RMP-001,remplisseuse,fuite_air,2,1.2,Fuite Air
+INC-0040,2026-06-13T16:05:00,RMP-001,remplisseuse,desalignement,2,2.1,Desalignement
+INC-0041,2026-06-14T01:05:00,RMP-001,remplisseuse,desalignement,3,2.9,Desalignement
+INC-0042,2026-06-27T17:50:00,OSM-001,osmoseur,contamination_eau,2,2.3,Contamination Eau
+INC-0043,2026-06-27T21:30:00,OSM-001,osmoseur,contamination_eau,4,3.1,Contamination Eau

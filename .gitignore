@@ -1,0 +1,48 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# ─── Archive locale (logs de debug, doublons) ─────────────────────────────
+_archive/
+
+# ─── Frontend (Next.js) ───────────────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+coverage/
+.next/
+out/
+frontend/build/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# ─── Python ───────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.class
+.venv/
+venv/
+
+# ─── Env / secrets ────────────────────────────────────────────────────────
+.env*
+!env.example
+*.pem
+
+# ─── Logs et sorties de scripts ───────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*_output*.txt
+*_result*.txt
+traceback_out.txt
+db_error.txt
+
+# ─── OS ───────────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

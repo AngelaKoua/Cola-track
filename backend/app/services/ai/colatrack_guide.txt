@@ -1,0 +1,80 @@
+# Guide Utilisateur Colatrack (Knowledge Base)
+
+Ce document répertorie les chemins de navigation et les actions exactes disponibles sur l'interface de la plateforme Colatrack. Il sert de base de connaissances pour l'assistant intelligent.
+
+### Gestion des Incidents
+- **Chemin URL** : `/dashboard/incidents`
+- **Parcours de navigation** : `Menu latéral` > `Incidents` (icône presse-papiers)
+- **Actions possibles** :
+  - **Créer un incident** : Cliquer sur le bouton rouge "Nouvel incident" situé en haut à droite de l'écran. Une modale s'ouvrira pour renseigner les détails (machine, description, date).
+  - **Résoudre un incident** : Dans le tableau central, repérer la ligne de l'incident concerné et cliquer sur l'action "Résoudre" (ou l'icône de validation).
+  - **Supprimer un incident** : Dans le tableau central, cliquer sur l'icône poubelle de la ligne correspondante, puis valider la confirmation.
+  - **Filtrer les incidents** : Utiliser la barre de recherche et les filtres situés juste au-dessus du tableau.
+
+### Gestion Techniciens (Accès Manager)
+- **Chemin URL** : `/dashboard/technicians`
+- **Parcours de navigation** : `Menu latéral` > `Gestion Techniciens` (icône utilisateurs)
+- **Actions possibles** :
+  - **Ajouter un technicien** : Cliquer sur le bouton vert "Ajouter un technicien" en haut à droite. Saisir l'identifiant (username) et l'e-mail dans la fenêtre, puis valider.
+  - **Désactiver un compte** : Dans la liste des techniciens, localiser le technicien et utiliser le bouton de bascule de statut (toggle) pour le désactiver.
+  - **Voir les détails / performances** : Cliquer sur l'action de détail pour ouvrir une modale de statistiques (comptes de saisie, etc.) dédiée à ce technicien.
+  - **Supprimer un technicien** : Cliquer sur l'icône de suppression (poubelle) sur la ligne, et confirmer la demande.
+
+### Saisie de Données (Accès Technicien principal)
+- **Chemin URL** : `/dashboard/input`
+- **Parcours de navigation** : `Menu latéral` > `Saisie Données` (icône activité)
+- **Actions possibles** :
+  - **Enregistrer des métriques** : Entrer les mesures relevées sur le terrain dans le formulaire de la page, soumettre le formulaire pour historiser les données.
+
+### Prédictions et Aide à la Décision
+- **Chemin URL** : `/dashboard/predictions`
+- **Parcours de navigation** : `Menu latéral` > `Prédictions` (icône triangle alerte)
+- **Actions possibles** :
+  - **Changer de Machine étudiée** : Utiliser le menu déroulant textuel "SÉLECTION ÉQUIPEMENT" en haut à droite. Sélectionner "Osmoseur" (OSM-001) ou "Remplisseuse" (RMP-001) pour actualiser toutes les données de la page.
+  - **Consulter l'analyse root-cause** : Faire défiler vers le bas pour observer les tableaux "Événements & Paramètres Anormaux" et les graphiques d'"Analyse causes racines".
+
+### IoT Monitoring
+- **Chemin URL** : `/dashboard/iot-monitoring`
+- **Parcours de navigation** : `Menu latéral` > `IoT Monitoring` (icône puce électronique)
+- **Actions possibles** :
+  - **Suivre en temps réel** : La page s'actualise automatiquement pour le monitoring. Les graphiques temporels (Line charts) y figurent pour observer les constantes de l'Osmoseur envoyées par l'ESP32.
+
+### Dashboard Global
+- **Chemin URL** : `/dashboard`
+- **Parcours de navigation** : `Menu latéral` > `Dashboard` (icône grille)
+- **Actions possibles** : 
+  - **Vue d'ensemble** : Consulter les KPIs généraux de production.
+  - **Déconnexion** : En bas du menu latéral, cliquer sur le bouton rouge "Déconnexion" (icône porte de sortie).
+
+### Fonctionnement Interne du Module IA (Prédictions & Analytics)
+Ce module complexe permet à la plateforme d'anticiper les pannes et d'aider à la décision.
+- **Architecture** : Le système s'articule en 5 couches analytiques (Situation Awareness, Anomaly Detection, Root Cause Analysis, Prognostics, Decision Support).
+- **Modèles ML embarqués** :
+  - **Détection d'anomalies** (Z-Score & Clustering) : `Isolation Forest`.
+  - **Probabilité de panne à 24 h** : `XGBoost`.
+  - **Indice de santé (Health Index)** : `Gradient Boosting Regressor (GBR)`.
+  - **Risque Qualité (Remplisseuse)** : `Random Forest (RF)`.
+- **Calcul du RUL (Remaining Useful Life)** : Réalisé par une régression linéaire pondérée mesurant la vitesse de dégradation. Le RUL correspond au temps estimé avant que la santé de la machine n'atteigne le seuil d'avertissement (70) ou critique (50).
+- **Priorisation des Recommandations** : Basée sur une matrice de décision croisant l'indice de santé et la probabilité de risque. **Règle d'or (Override)** : Si le niveau d'alerte direct (des capteurs) atteint ou dépasse 3, l'action bascule systématiquement en priorité **CRITICAL** (Arrêt machine immédiat).
+- **Explicabilité du diagnostic** : Le système justifie ses diagnostics en extrayant l'importance relative des variables (`feature_importances_`) issues du modèle XGBoost, couplée à la chronologie des dérives (drifts).
+
+### Ingénierie des Caractéristiques (Feature Engineering)
+Pour que les modèles ML de type XGBoost ou Isolation Forest soient performants, les capteurs bruts instantanés ont été enrichis d'une dimension temporelle :
+- **Séparation Stricte (Machine Splitting)** : Les modèles sont entrainés et exécutés de manière complètement indépendante entre l'Osmoseur et la Remplisseuse pour ne pas croiser la physique des domaines.
+- **Signaux Temporels (Tenseur de données)** : Le modèle ne se contente pas des valeurs à l'instant T0. Il ingère simultanément :
+  - *Les Dérivées (Taux de changement)* : Le delta entre T0 et T-1 (ex: `pression_rate`). Cela permet aux algorithmes de dissocier une panne brutale d'une usure lente.
+  - *Fenêtres Glissantes (Rolling Means à 1h)* : Une moyenne mobile sur les 12 dernières mesures pour lisser le bruit gaussien des capteurs et identifier les dérives (drifts) persistantes.
+- **Normalisation (Z-Score)** : Avant l'inférence via *Isolation Forest* (qui calcule des distances mathématiques), les features passent dans un `StandardScaler` (ex. `iso_forest_scaler_osmoseur.joblib`) pour que des milliers de L/h n'écrasent pas des dixièmes de pH.
+- **Déséquilibre de Classe (SMOTE)** : La majorité écrasante des données industrielles est "normale". Pour l'entrainement, les classes critiques (~10%) ont été interpolées mathématiquement par **SMOTE (Synthetic Minority Over-sampling Technique)**, forçant un équilibre 50/50. C'est le secret qui permet au XGBoost d'atteindre un **Rappel (Recall) de 97%** sur la prédiction de panne.
+
+### Règles Métier et Seuils Industriels (SOPs)
+L'intelligence de la plateforme ne repose pas seulement sur le ML, mais aussi sur un Moteur de Décision Hybride qui applique des règles physiques strictes de sécurité.
+- **Règles d'Arrêt Critique (Niveau 3 - Priorité Absolue) :**
+  - *Osmoseur* : Si la Pression Membrane dépasse **15,5 bar** OU si la Conductivité Perméat dépasse **45,0 µS/cm**.
+  - *Remplisseuse* : Si le Volume de Remplissage sort de la plage **[0,485 L - 0,515 L]** (non-conformité produit) OU si les Vibrations Moteur dépassent **4,5 mm/s** couplé à une probabilité de panne > 85%.
+- **Alertes Dashboard (KPIs globaux) :**
+  - Le *Rendement Global* doit idéalement être ≥ 85%. En dessous de 75%, il passe en statut de danger (rouge).
+  - Le *Temps d'Arrêt* quotidien ne doit pas excéder 1,2 h. Il devient critique au-delà de 2,0 h/jour.
+- **Comportement nominal des capteurs :**
+  - *Osmoseur* : Pression membrane nominale autour de 12 bar, pH entrée stable entre 6,3 et 7,7, Température eau à 18°C.
+  - *Remplisseuse* : MTBF (Mean Time Between Failures) nominal de 150h, Vibrations naturelles à 1,8 mm/s, Température de remplissage idéale à 4,5°C.
