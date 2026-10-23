@@ -7,8 +7,8 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { Notification, WebSocketNotificationPayload } from '@/types/notification';
 import { notificationService } from '@/services/notificationService';
+import { WS_BASE } from '@/lib/config'
 
-const WS_BASE = process.env.NEXT_PUBLIC_WS_URL || 'ws://localhost:8000';
 
 interface UseNotificationsResult {
     notifications: Notification[];

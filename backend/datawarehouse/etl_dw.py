@@ -63,17 +63,16 @@ class DataWarehouseETL:
             SELECT DISTINCT responsable as technician_name FROM incidents
         """)
         
-        sql_insert = text("""
+        # Single set-based statement: one round trip instead of one per technician
+        sql_insert = text(f"""
             INSERT INTO dw.dim_technician (original_name, first_seen_at)
-            VALUES (:name, NOW())
+            SELECT technician_name, NOW()
+            FROM ({sql_extract.text}) src
+            WHERE technician_name IS NOT NULL AND technician_name <> ''
             ON CONFLICT (original_name) DO NOTHING
         """)
-        
-        techs = self.db.execute(sql_extract).fetchall()
-        
-        for (tech_name,) in techs:
-            if tech_name:
-                self.db.execute(sql_insert, {"name": tech_name})
+
+        self.db.execute(sql_insert)
 
     def load_dim_time(self):
         logger.info("Loading Dimension: Time")
@@ -92,49 +91,38 @@ class DataWarehouseETL:
             
         max_date = current_time
         
-        start_dt = min_date.replace(minute=0, second=0, microsecond=0)
-        end_dt = max_date.replace(minute=0, second=0, microsecond=0) + timedelta(hours=1)
-        
-        current = start_dt
-        
-        sql_check = text("SELECT 1 FROM dw.dim_time WHERE time_id = :tid")
+        # Work in naive UTC: dim_time.full_timestamp is a UTC TIMESTAMP
+        start_dt = min_date.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0, tzinfo=None)
+        end_dt = max_date.astimezone(timezone.utc).replace(minute=0, second=0, microsecond=0, tzinfo=None)
+
+        # Generate every hour server-side in one statement (was one round trip per hour)
         sql_insert = text("""
             INSERT INTO dw.dim_time (
-                time_id, full_timestamp, year, month, day, 
+                time_id, full_timestamp, year, month, day,
                 hour, quarter, day_of_week, is_weekend
-            ) VALUES (
-                :tid, :ts, :yr, :mo, :dy, 
-                :hr, :q, :dow, :is_we
             )
+            SELECT
+                to_char(ts, 'YYYYMMDDHH24')::bigint,
+                ts,
+                EXTRACT(YEAR FROM ts)::int,
+                EXTRACT(MONTH FROM ts)::int,
+                EXTRACT(DAY FROM ts)::int,
+                EXTRACT(HOUR FROM ts)::int,
+                EXTRACT(QUARTER FROM ts)::int,
+                EXTRACT(ISODOW FROM ts)::int,     -- 1=Monday, 7=Sunday
+                EXTRACT(ISODOW FROM ts) >= 6
+            FROM generate_series(CAST(:start AS timestamp), CAST(:end AS timestamp), interval '1 hour') AS ts
+            ON CONFLICT (time_id) DO NOTHING
         """)
-        
-        while current < end_dt:
-            time_id = self._generate_time_id(current)
-            
-            if not self.db.execute(sql_check, {"tid": time_id}).scalar():
-                is_weekend = current.weekday() >= 5
-                quarter = (current.month - 1) // 3 + 1
-                
-                self.db.execute(sql_insert, {
-                    "tid": time_id,
-                    "ts": current,
-                    "yr": current.year,
-                    "mo": current.month,
-                    "dy": current.day,
-                    "hr": current.hour,
-                    "q": quarter,
-                    "dow": current.weekday() + 1,
-                    "is_we": is_weekend
-                })
-            
-            current += timedelta(hours=1)
+
+        self.db.execute(sql_insert, {"start": start_dt, "end": end_dt})
 
     def load_fact_osmoseur(self):
         logger.info("Loading Fact: Osmoseur (Hourly)")
         
         sql_extract = text("""
             SELECT 
-                to_char(o.created_at, 'YYYYMMDDHH')::bigint as time_id,
+                to_char(o.created_at AT TIME ZONE 'UTC', 'YYYYMMDDHH24')::bigint as time_id,
                 dt.technician_id,
                 AVG(o.debit_permeat) as debit_permeat,
                 AVG(o.debit_concentrat) as debit_concentrat,
@@ -195,7 +183,7 @@ class DataWarehouseETL:
         
         sql_extract = text("""
             SELECT 
-                to_char(r.created_at, 'YYYYMMDDHH')::bigint as time_id,
+                to_char(r.created_at AT TIME ZONE 'UTC', 'YYYYMMDDHH24')::bigint as time_id,
                 dt.technician_id,
                 AVG(r.unites_produites_conformes) as unites_conformes,
                 AVG(r.heures_arret) as heures_arret,
@@ -268,7 +256,7 @@ class DataWarehouseETL:
         
         sql_extract = text("""
             SELECT
-                to_char(i.date_declaration, 'YYYYMMDDHH')::bigint as time_id,
+                to_char(i.date_declaration AT TIME ZONE 'UTC', 'YYYYMMDDHH24')::bigint as time_id,
                 dt.technician_id,
                 i.id as incident_uuid,
                 i.equipement,

@@ -12,7 +12,14 @@ npm run build && npm start
 npm run lint
 ```
 
-L'API est attendue sur `http://127.0.0.1:8000` (voir [src/lib/api.ts](src/lib/api.ts)).
+L'URL du backend est définie à un seul endroit, [src/lib/config.ts](src/lib/config.ts) :
+
+| Variable | Rôle | Défaut |
+| --- | --- | --- |
+| `NEXT_PUBLIC_API_URL` | URL du backend, **sans** `/api` (ex. `https://colatrack-api.onrender.com`) | `http://localhost:8000` |
+| `NEXT_PUBLIC_WS_URL` | URL WebSocket (optionnelle, déduite de la précédente) | `ws://localhost:8000` |
+
+Ces variables sont intégrées au moment du build : après les avoir modifiées sur Vercel, il faut redéployer.
 
 ## Structure
 

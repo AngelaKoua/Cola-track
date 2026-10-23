@@ -67,7 +67,16 @@ async def lifespan(app: FastAPI):
     """
     # Startup: Create database tables
     print("Starting CTrack API...")
-    
+
+    # Refuse to run in production with a placeholder JWT secret (tokens could be forged)
+    if not settings.DEBUG and (
+        len(settings.SECRET_KEY) < 32 or "change-this-in-production" in settings.SECRET_KEY
+    ):
+        raise RuntimeError(
+            "SECRET_KEY is missing or still a placeholder. "
+            "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+        )
+
     # Store the main event loop for background WebSocket pushes
     # so sync endpoints can dispatch async tasks.
     ws_manager.loop = asyncio.get_running_loop()

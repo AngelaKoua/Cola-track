@@ -125,10 +125,14 @@ def main():
         # Check if at least dimensions + osmoseur worked
         success_count = sum(1 for v in results["dimensions"].values() if v == "OK")
         success_count += sum(1 for v in results["facts"].values() if v == "OK")
-        
+        total_steps = len(results["dimensions"]) + len(results["facts"])
+
         if success_count >= 3:  # At least dimensions + 1 fact
             logger.info("")
-            logger.info("[PARTIAL SUCCESS] Data warehouse partially populated")
+            if success_count == total_steps:
+                logger.info("[SUCCESS] Data warehouse fully populated")
+            else:
+                logger.info("[PARTIAL SUCCESS] Data warehouse partially populated")
             logger.info("Next steps:")
             logger.info("  1. Check data: python -c \"from app.database import SessionLocal; from sqlalchemy import text; db = SessionLocal(); print('Osmoseur:', db.execute(text('SELECT COUNT(*) FROM dw.fact_osmoseur_hourly')).scalar()); print('Remplisseuse:', db.execute(text('SELECT COUNT(*) FROM dw.fact_remplisseuse_hourly')).scalar())\"")
             logger.info("  2. Test analytics endpoints at http://localhost:8000/docs")

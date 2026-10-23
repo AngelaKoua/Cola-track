@@ -1,5 +1,16 @@
-from sqlalchemy.orm import Session
-from app.database import SessionLocal, engine
+"""
+Create the initial accounts.
+
+Passwords are never stored in this file. Set SEED_TECHNICIAN_PASSWORD /
+SEED_MANAGER_PASSWORD before running, otherwise a random password is
+generated and printed once (only stored hashed in the database).
+
+    python -m scripts.seed.seed_users
+"""
+import os
+import secrets
+
+from app.database import SessionLocal
 from app.models.user import User
 from app.routers.auth import get_password_hash
 
@@ -7,25 +18,24 @@ def seed_users():
     db = SessionLocal()
     try:
         users = [
-            {"username": "technician", "password": "tech123", "role": "technician"},
-            {"username": "manager", "password": "manager123", "role": "manager"},
-
+            {"username": "technician", "role": "technician", "password_env": "SEED_TECHNICIAN_PASSWORD"},
+            {"username": "manager", "role": "manager", "password_env": "SEED_MANAGER_PASSWORD"},
         ]
 
         for user_data in users:
             user = db.query(User).filter(User.username == user_data["username"]).first()
             if not user:
-                hashed_password = get_password_hash(user_data["password"])
+                password = os.environ.get(user_data["password_env"]) or secrets.token_urlsafe(12)
                 new_user = User(
                     username=user_data["username"],
-                    password_hash=hashed_password,
+                    password_hash=get_password_hash(password),
                     role=user_data['role']
                 )
                 db.add(new_user)
-                print(f"Created user: {user_data['username']}")
+                print(f"Created user: {user_data['username']} (password: {password})")
             else:
                 print(f"User already exists: {user_data['username']}")
-        
+
         db.commit()
     finally:
         db.close()

@@ -7,6 +7,7 @@ import {
     Send
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { API_BASE } from '@/lib/config'
 
 // ─── Types ───────────────────────────────────────────────────
 type ChatMessageRole = "user" | "model";
@@ -83,7 +84,7 @@ export default function ColaAssist() {
                 
             const contextPayload = getContext();
             
-            const response = await fetch("http://localhost:8000/api/ai/chat/", {
+            const response = await fetch(`${API_BASE}/api/ai/chat/`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ messages: apiMessages, context: contextPayload })

@@ -25,7 +25,7 @@ engine = create_engine(
     pool_pre_ping=True,  # Verify connections before using them
     pool_size=5,          # Number of connections to maintain
     max_overflow=10,      # Maximum number of connections to create beyond pool_size
-    echo=settings.DEBUG,   # Log all SQL statements when DEBUG=True
+    echo=settings.SQL_ECHO,  # Log all SQL statements when SQL_ECHO=True
     connect_args={"client_encoding": "utf8"}  # Force UTF-8 encoding for client communication
 )
 """
@@ -35,7 +35,7 @@ The engine manages database connections and connection pooling.
 - pool_pre_ping: Ensures connections are alive before use
 - pool_size: Number of persistent connections
 - max_overflow: Additional connections when pool is exhausted
-- echo: Logs SQL queries in debug mode
+- echo: Logs SQL queries when SQL_ECHO=True
 """
 
 

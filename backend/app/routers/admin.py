@@ -3,11 +3,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import get_db
 from datawarehouse.etl_dw import DataWarehouseETL
+from app.routers.auth import require_manager
 
-# Note: In a real app, you would add authentication/authorization here using Depends(get_current_admin)
+# Every admin route requires an authenticated manager
 router = APIRouter(
     prefix="/admin",
-    tags=["admin"]
+    tags=["admin"],
+    dependencies=[Depends(require_manager)]
 )
 
 @router.post("/run-dw-etl", status_code=status.HTTP_200_OK)

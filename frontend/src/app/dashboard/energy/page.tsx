@@ -34,38 +34,34 @@ export default function EnergyPage() {
                 <KPICard
                     title="Électricité"
                     value="12,450 kWh"
-                    icon={Zap}
+                    icon={<Zap className="h-4 w-4 text-blue-500" />}
                     trend="-2.5%"
-                    trendUp={true}
+                    status="success"
                     description="Conso. journalière"
-                    color="text-blue-500"
                 />
                 <KPICard
                     title="Eau Industrielle"
                     value="850 m³"
-                    icon={Droplets}
+                    icon={<Droplets className="h-4 w-4 text-blue-400" />}
                     trend="+1.2%"
-                    trendUp={false}
+                    status="warning"
                     description="Conso. journalière"
-                    color="text-blue-400"
                 />
                 <KPICard
                     title="Air Comprimé"
                     value="4,200 Nm³"
-                    icon={Wind}
+                    icon={<Wind className="h-4 w-4 text-green-500" />}
                     trend="-0.8%"
-                    trendUp={true}
+                    status="success"
                     description="Conso. journalière"
-                    color="text-green-500"
                 />
                 <KPICard
                     title="Énergie Thermique"
                     value="3,100 kWh"
-                    icon={Flame}
+                    icon={<Flame className="h-4 w-4 text-orange-500" />}
                     trend="+0.5%"
-                    trendUp={false}
+                    status="warning"
                     description="Vapeur & Eau chaude"
-                    color="text-orange-500"
                 />
             </div>
 

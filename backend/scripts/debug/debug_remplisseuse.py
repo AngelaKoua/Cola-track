@@ -37,7 +37,7 @@ try:
     print("\n4. Testing ETL extraction query...")
     sql_extract = text("""
         SELECT 
-            to_char(r.created_at, 'YYYYMMDDHH')::bigint as time_id,
+            to_char(r.created_at AT TIME ZONE 'UTC', 'YYYYMMDDHH24')::bigint as time_id,
             dt.technician_id,
             AVG(r.unites_produites_conformes) as unites_conformes,
             AVG(r.heures_arret) as heures_arret,

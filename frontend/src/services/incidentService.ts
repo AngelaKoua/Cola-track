@@ -1,7 +1,8 @@
 import { Incident, IncidentCreate, IncidentUpdate, IncidentKPI, IncidentFilters } from '@/types/incident';
+import { API_BASE } from '@/lib/config'
 
 // Use environment variable or default to localhost
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = `${API_BASE}/api`;
 
 const incidentService = {
     // Get all incidents with optional filters

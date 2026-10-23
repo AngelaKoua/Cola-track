@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Modal from '@/components/ui/Modal';
 import { Incident, IncidentCreate, IncidentUpdate } from '@/types/incident';
 import { Loader2 } from 'lucide-react';
+import { API_BASE } from '@/lib/config'
+import { authHeaders } from '@/lib/auth'
 
 interface IncidentModalProps {
     isOpen: boolean;
@@ -18,7 +20,7 @@ interface PlatformUser {
     role: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_URL = API_BASE;
 
 const LIGNES = ["Ligne 1", "Ligne 2", "Traitement Eaux"];
 const EQUIPEMENTS = ["Remplisseuse", "Osmoseur", "Etiqueteuse", "Fardeleuse", "Palettiseur", "Convoyeur", "Mixer", "Chaudière"];
@@ -101,7 +103,7 @@ const IncidentModal: React.FC<IncidentModalProps> = ({ isOpen, onClose, onSave, 
         }
         setIsSearching(true);
         try {
-            const res = await fetch(`${API_URL}/api/users/list?search=${encodeURIComponent(query)}`);
+            const res = await fetch(`${API_URL}/api/users/list?search=${encodeURIComponent(query)}`, { headers: authHeaders() });
             if (res.ok) {
                 const data: PlatformUser[] = await res.json();
                 setUserResults(data);
@@ -136,7 +138,7 @@ const IncidentModal: React.FC<IncidentModalProps> = ({ isOpen, onClose, onSave, 
         if (userSearch.length === 0) {
             searchUsers(''); // Will not trigger if < 1 char
             // Instead, fetch all users
-            fetch(`${API_URL}/api/users/list?search=`)
+            fetch(`${API_URL}/api/users/list?search=`, { headers: authHeaders() })
                 .then(res => res.ok ? res.json() : [])
                 .then((data: PlatformUser[]) => {
                     setUserResults(data);

@@ -25,12 +25,14 @@ from app.schemas.technician import (
 )
 from app.services.technician_analytics import TechnicianAnalyticsService
 from app.services.email_service import send_welcome_email
-from app.routers.auth import get_password_hash
+from app.routers.auth import get_password_hash, require_manager
 
 
+# Technician management is restricted to authenticated managers
 router = APIRouter(
     prefix="/api/technicians",
-    tags=["Technicians"]
+    tags=["Technicians"],
+    dependencies=[Depends(require_manager)]
 )
 
 

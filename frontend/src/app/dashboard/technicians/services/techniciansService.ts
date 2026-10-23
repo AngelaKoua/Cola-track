@@ -1,3 +1,5 @@
+import { API_BASE } from '@/lib/config'
+import { authHeaders, redirectIfUnauthorized } from '@/lib/auth'
 /**
  * Technicians Service
  * 
@@ -5,7 +7,6 @@
  * Provides typed interfaces for API responses.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
 // ============================================================================
 // TYPE DEFINITIONS
@@ -90,10 +91,12 @@ export class TechniciansService {
             {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 }
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             throw new Error(`API Error: ${response.statusText}`)
@@ -115,10 +118,12 @@ export class TechniciansService {
             {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 }
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             throw new Error(`API Error: ${response.statusText}`)
@@ -143,10 +148,12 @@ export class TechniciansService {
             {
                 method: "GET",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 }
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             throw new Error(`API Error: ${response.statusText}`)
@@ -164,11 +171,13 @@ export class TechniciansService {
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 },
                 body: JSON.stringify(data)
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             const error = await response.json()
@@ -190,11 +199,13 @@ export class TechniciansService {
             {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 },
                 body: JSON.stringify(data)
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             const error = await response.json()
@@ -216,11 +227,13 @@ export class TechniciansService {
             {
                 method: "PATCH",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 },
                 body: JSON.stringify({ is_active: isActive })
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             const error = await response.json()
@@ -239,10 +252,12 @@ export class TechniciansService {
             {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    ...authHeaders()
                 }
             }
         )
+        redirectIfUnauthorized(response)
 
         if (!response.ok) {
             const error = await response.json()

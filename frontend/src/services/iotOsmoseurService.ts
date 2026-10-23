@@ -1,3 +1,4 @@
+import { API_BASE } from '@/lib/config'
 /**
  * IoT Osmoseur API service.
  *
@@ -5,7 +6,7 @@
  * Uses native fetch (consistent with lib/api.ts pattern).
  */
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/iot/osmoseur"
+const API_BASE_URL = `${API_BASE}/api/iot/osmoseur`
 
 export interface IoTOsmoseurReading {
     id: string

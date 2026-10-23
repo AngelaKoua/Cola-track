@@ -3,8 +3,9 @@
  */
 
 import { NotificationListResponse, UnreadCountResponse } from '@/types/notification';
+import { API_BASE } from '@/lib/config'
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
+const API_URL = `${API_BASE}/api`;
 
 export const notificationService = {
     async getAll(userId: number, skip = 0, limit = 20): Promise<NotificationListResponse> {

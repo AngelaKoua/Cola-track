@@ -62,6 +62,12 @@ async def get_current_active_user(current_user: Annotated[User, Depends(get_curr
         raise HTTPException(status_code=400, detail="Inactive user")
     return current_user
 
+async def require_manager(current_user: Annotated[User, Depends(get_current_active_user)]):
+    """Restrict a route (or a whole router) to authenticated managers."""
+    if current_user.role != "manager":
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Manager role required")
+    return current_user
+
 @router.post("/token", response_model=Token)
 async def login_for_access_token(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
@@ -83,10 +89,14 @@ async def login_for_access_token(
 
 
 @router.get("/api/users/list")
-def list_users(search: str = "", db: Session = Depends(get_db)):
+def list_users(
+    search: str = "",
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_active_user)
+):
     """
     List active users, optionally filtered by username search.
-    Used for autocomplete in incident assignment.
+    Used for autocomplete in incident assignment (requires authentication).
     """
     query = db.query(User).filter(User.is_active == True)
     if search:

@@ -44,7 +44,10 @@ class Settings(BaseSettings):
     
     DEBUG: bool = True
     """Enable debug mode (set to False in production)"""
-    
+
+    SQL_ECHO: bool = False
+    """Log every SQL statement (very verbose, slows down scripts against remote databases)"""
+
     # ============================================================================
     # CORS CONFIGURATION
     # ============================================================================

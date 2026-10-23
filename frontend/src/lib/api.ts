@@ -1,6 +1,7 @@
 import { OsmoseurApiRequest, OsmoseurApiResponse, RemplisseuseApiRequest, RemplisseuseApiResponse } from '@/types'
+import { API_BASE } from '@/lib/config'
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api'
+const API_BASE_URL = `${API_BASE}/api`
 
 // Osmoseur API functions
 export const osmoseurApi = {
@@ -148,7 +149,7 @@ export const authApi = {
         formBody.append('username', username)
         formBody.append('password', password)
 
-        const response = await fetch('http://127.0.0.1:8000/token', {
+        const response = await fetch(`${API_BASE}/token`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',

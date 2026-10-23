@@ -1,9 +1,11 @@
+import os
+
 import requests
 
 def test_login():
     url = "http://localhost:8000/token"
-    # Technician
-    data = {"username": "technician", "password": "tech123"}
+    # Technician (password taken from the environment, never hardcoded)
+    data = {"username": "technician", "password": os.environ.get("TEST_TECHNICIAN_PASSWORD", "")}
     try:
         response = requests.post(url, data=data)
         print(f"Login Status: {response.status_code}")

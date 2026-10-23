@@ -6,8 +6,8 @@
  */
 
 import type { KPIStatus, TrendDirection } from '../config/kpiThresholds'
+import { API_BASE } from '@/lib/config'
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
 // ============================================================================
 // TYPE DEFINITIONS
